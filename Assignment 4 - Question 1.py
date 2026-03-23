@@ -11,7 +11,7 @@
 import numpy
 import pandas
 from sklearn.datasets import load_breast_cancer
-breastCancerData = load_breast_cancer ()
+breastCancerData = load_breast_cancer()
 
 # feature matrix and target vector
 featureMatrix = breastCancerData.data # X
@@ -27,6 +27,7 @@ print("Target shape: " + str(targetVectorShape))
 
 
 # number of samples
+# Source of method used: https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html
 targetVectorCount = pandas.Series(targetVector).value_counts()
 
 print(targetVectorCount)
