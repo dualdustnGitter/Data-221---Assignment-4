@@ -85,3 +85,25 @@ newDiseaseSamples = pandas.DataFrame(features_test)
 classProbabilities = neuralNetworkModel.predict(newDiseaseSamples)
 
 
+
+### Confusion matrices ###
+from sklearn.metrics import confusion_matrix
+
+
+
+testProbabilities = decision_tree_classifier.predict(features_test)
+testPredictions = (testProbabilities > 0.5).astype(int).flatten()
+
+# Decision Tree
+# from https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html
+treePredictions = decision_tree_classifier.predict(features_test)
+treeConfusionMatrix = confusion_matrix(labels_test, treePredictions)
+print("Decision tree confusion matrix:")
+print(treeConfusionMatrix)
+
+# Neural Network
+neuralProbabilities = neuralNetworkModel.predict(features_test)
+neuralPredictions = (neuralProbabilities > 0.5).astype(int).flatten()
+neuralConfusionMatrix = confusion_matrix(labels_test, neuralPredictions)
+print("Neural network confusion matrix:")
+print(neuralConfusionMatrix)
