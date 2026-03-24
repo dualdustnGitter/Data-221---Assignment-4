@@ -1,8 +1,12 @@
-### Question 6
-# using CNN 
+### Question 7
+# generate predictions on test set
+# compute/display confsuoin matrix
+# id and visualize at least 3 misclassified images
+#   for each shopw, true label, and predicted label
 # 
-# 
-###
+# one pattern observed inb miss classifications
+# one realistic method to improve CNN performance
+### 
 
 from tensorflow.keras.datasets import fashion_mnist
 (X_train, y_train), (X_test, y_test) = fashion_mnist.load_data()
@@ -38,16 +42,26 @@ model.summary()
 # compile and train
 model.compile(optimizer="adam",loss="sparse_categorical_crossentropy",metrics=["accuracy"] )
 history = model.fit(X_train, y_train,validation_split=0.1,epochs=15, batch_size=64)
-accuracy, loss = model.evaluate(X_test, y_test)
-
-print("Accuracy of CNN: " + accuracy)
-print("Loss of CNN: " + loss)
 
 
-# CNN's are meant to work on these images since it works with 2D matrices
-# while normal neural networks work on 1D vectors which we need to flatten
-# the image into which causes a whole dimension worth of features to be lost
-# which overall decreases accuracy
 
-# the convolution layer here is learning how to predict what actually is being shown
-# by looking at small patterns which allows it to classify different things in the image
+
+# save and predict test
+model.save("mnist_model.h5")
+
+from tensorflow.keras.models import load_model
+
+loaded_mnist_classifier_model = load_model("mnist_model.h5")
+testPredictions = loaded_mnist_classifier_model.predict(X_test)
+
+
+
+# Confusion matrix
+from sklearn.metrics import confusion_matrix
+
+confusionMatrix = confusion_matrix(y_test, testPredictions)
+print(confusionMatrix)
+
+
+
+# misclassified images
