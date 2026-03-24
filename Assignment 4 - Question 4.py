@@ -13,7 +13,7 @@
 from tensorflow.keras.models import Sequential
 neuralNetworkModel = Sequential()
 from tensorflow.keras.layers import Dense, InputLayer
-inputLayer = InputLayer(input_shape=(30,)) # input layer 2 neurons
+inputLayer = InputLayer(input_shape=(30,)) # input layer 30 neurons
 # hidden layer
 neuralNetworkModel.add(inputLayer) # first layer
 hiddenLayer = Dense(6)
@@ -28,17 +28,14 @@ neuralNetworkModel.compile(loss="binary_crossentropy", metrics=["accuracy"])
 
 
 
-# training
+# import dataset
 from sklearn.model_selection import train_test_split
-
-import pandas as pd
-
+import pandas
 from sklearn.datasets import load_breast_cancer
 breastCancerData = load_breast_cancer()
 
 featureMatrix = breastCancerData.data
 targetVector = breastCancerData.target
-
 
 # splitting
 features_train, features_test, labels_train, labels_test = train_test_split(featureMatrix, 
@@ -46,32 +43,38 @@ features_train, features_test, labels_train, labels_test = train_test_split(feat
                                                                             test_size=0.2,
                                                                             random_state=42)
 
-
 # standardize
 from sklearn.preprocessing import StandardScaler
-
 scaler = StandardScaler()
-
-features_train = scaler.fit_transform(features_train)   # learn mean/std from train
+features_train = scaler.fit_transform(features_train)
 features_test = scaler.transform(features_test)
 
 
 neuralNetworkModel.fit(features_train,labels_train,epochs=10)
 
 
-# Predict and accuracy of Train
-newDiseaseSamples = pd.DataFrame(features_train)
+# Predict and accuracy of Train data
+newDiseaseSamples = pandas.DataFrame(features_train)
 classProbabilities = neuralNetworkModel.predict(newDiseaseSamples)
 
 loss, trainAccuracy = neuralNetworkModel.evaluate(features_train, labels_train)
 
-# Predict and accuracy of Test
-newDiseaseSamples = pd.DataFrame(features_test)
+# Predict and accuracy of Test data
+newDiseaseSamples = pandas.DataFrame(features_test)
 classProbabilities = neuralNetworkModel.predict(newDiseaseSamples)
 
 loss, testAccuracy = neuralNetworkModel.evaluate(features_test, labels_test)
 
-
+# report the accuracy's
 print("\n\n")
 print("Train accuracy: " + str(trainAccuracy))
 print("Test accuracy: " + str(testAccuracy))
+
+
+# feature scaling is necessary since datasets may have features that
+# do not have the same "scale" for example a feature of temperature (F) and weight (kg) 
+# and this inconsistency causes the model to not be as efficient
+# standardizing allows these features to have similar scaling which allows for the
+# weights to be calculated more accurately
+
+# "epoch" in the context of neural networks means a full run through of the training dataset
