@@ -96,14 +96,25 @@ testPredictions = (testProbabilities > 0.5).astype(int).flatten()
 
 # Decision Tree
 # from https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html
+decision_tree_classifier.fit(features_train, labels_train)
 treePredictions = decision_tree_classifier.predict(features_test)
 treeConfusionMatrix = confusion_matrix(labels_test, treePredictions)
 print("Decision tree confusion matrix:")
 print(treeConfusionMatrix)
 
 # Neural Network
-neuralProbabilities = neuralNetworkModel.predict(features_test)
+scaledTestMatrix = scaler.transform(features_test)
+
+neuralProbabilities = neuralNetworkModel.predict(scaledTestMatrix)
 neuralPredictions = (neuralProbabilities > 0.5).astype(int).flatten()
 neuralConfusionMatrix = confusion_matrix(labels_test, neuralPredictions)
 print("Neural network confusion matrix:")
 print(neuralConfusionMatrix)
+
+
+# Here I would prefer the neural networks since in the decision tree, basically all the negative were false
+# and although decision trees had a higher precision when it came to finding true positives
+# it did a bad job at predicting the negatives
+
+# An advantage of using deicsion trees is that itss intrepretable
+# while neural networks are more efficient and accurate but unintrepretable
